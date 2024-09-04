@@ -29,19 +29,23 @@ public class BookService {
         Optional<Book> book = bookRepository.findBookByBookTitle(title);
         return book.map(book1 -> book1.getAvailableSamples() > 0).orElse(false);
     }
-    public int borrowBook(Book book) {
+    public Book borrowBook(Book book) {
         if(isBookAvailable(book.getBookTitle())) {
-            return bookRepository.borrowBook(book.getBookCode(), book.getAvailableSamples() -1);
+            book.setAvailableSamples(book.getAvailableSamples() - 1);
+            return bookRepository.save(book);
         }
-        return 0;
+        return null;
     }
 
     public void returnBook(Long bookId){
         Optional<Book> book = bookRepository.findById(bookId);
-        book.ifPresent(book1 -> {
+        if(book.isPresent()) {
+            Book book1 = book.get();
             if(book1.getAvailableSamples() < book1.getSamplesTotalNumber()) {
-                bookRepository.returnBook(book1.getAvailableSamples()+1, bookId);
+                book1.setAvailableSamples(book1.getAvailableSamples() + 1);
+                bookRepository.save(book1);
             }
-        });
+        }
+
     }
 }

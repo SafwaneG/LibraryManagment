@@ -18,6 +18,7 @@ public class BookController {
 
     @PostMapping
     public Book saveBook(@RequestBody Book book) {
+        System.out.println(book.getAuthor());
         return bookService.addBook(book);
     }
     @GetMapping

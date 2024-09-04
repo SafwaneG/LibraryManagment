@@ -35,11 +35,13 @@ public class LoanService {
         ).orElse(null);
     }
     @Transactional
-    public int returnLoan(Long id) {
+    public Loan returnLoan(Long id) {
         Optional<Loan> loan = loanRepository.findById(id);
         if(loan.isPresent() && loan.get().getEffectiveReturnDate() == null) {
-            bookService.returnBook(loan.get().getBorrowedBookId());
-            return loanRepository.returnLoan(id, LocalDateTime.now());
+            Loan loan1 = loan.get();
+            bookService.returnBook(loan1.getBorrowedBook().getBookCode());
+            loan1.setEffectiveReturnDate(LocalDateTime.now());
+            return loanRepository.save(loan1);
         }
         else{
             throw new LoanAlreadyClosed();
@@ -47,10 +49,13 @@ public class LoanService {
     }
 
     public Loan addLoan(Loan loan) {
-        Long requestedBookId = loan.getBorrowedBookId();
+        System.out.println("in add");
+        Long requestedBookId = loan.getBorrowedBook().getBookCode();
+        System.out.println("book id:"+requestedBookId);
         Optional<Book> requestedBook = bookService.searchBook(requestedBookId);
         requestedBook.map(requestedBook1 -> {
-            if(bookService.borrowBook(requestedBook1) == 1) {
+            if(bookService.borrowBook(requestedBook1) != null) {
+                System.out.println("in the if");
                 return loanRepository.save(loan);
             }else {
                 throw new BookNotAvailableException();

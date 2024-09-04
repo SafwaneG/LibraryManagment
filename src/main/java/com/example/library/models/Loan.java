@@ -1,24 +1,27 @@
 package com.example.library.models;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 @Data
-@Table("loans")
+@AllArgsConstructor
+@Entity
 public class Loan {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long loanCode;
-    private Long adherentId;
-    private Long borrowedBookId;
+    @ManyToOne
+    private Adherent adherent;
+    @ManyToOne
+    private Book borrowedBook;
     private LocalDateTime loanDate;
     private LocalDateTime expectedReturnDate;
     private LocalDateTime effectiveReturnDate;
 
-    public Loan(Long adherentId, Long borrowedBookId) {
-        this.adherentId = adherentId;
-        this.borrowedBookId = borrowedBookId;
+    public Loan() {
         this.loanDate = LocalDateTime.now();
         this.expectedReturnDate = LocalDateTime.now().plusDays(7);
         this.effectiveReturnDate = null;

@@ -1,13 +1,15 @@
 package com.example.library.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Table("authors")
+@NoArgsConstructor
+@Entity
 public class Author extends Person{
     @Id
     private Long authorCode;

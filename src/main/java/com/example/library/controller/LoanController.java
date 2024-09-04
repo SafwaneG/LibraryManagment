@@ -37,7 +37,7 @@ public class LoanController {
         return null;
     }
     @PutMapping("/{id}")
-    public int returnLoan(@PathVariable("id") Long id) {
+    public Loan returnLoan(@PathVariable("id") Long id) {
         return loanService.returnLoan(id);
     }
     @GetMapping("/state/{id}")

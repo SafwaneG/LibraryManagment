@@ -1,21 +1,27 @@
 package com.example.library.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.Generated;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 @Data
-@Table("adherents")
+@Entity
+@AllArgsConstructor
 public class Adherent extends Person{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeAdherent;
     private LocalDateTime date;
-
-    public Adherent(String fname, String lname) {
-        super(fname, lname);
+    public Adherent() {
         date =  LocalDateTime.now();
     }
+
 
     @Override
     public String toString() {
